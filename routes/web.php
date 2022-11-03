@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\RouteConstructor\RouteConstructor;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\DashboardController;
@@ -140,3 +141,4 @@ Route::get('reports', [ReportsController::class, 'index'])
 Route::get('/img/{path}', [ImagesController::class, 'show'])
     ->where('path', '.*')
     ->name('image');
+RouteConstructor::constructWebRoutes();
