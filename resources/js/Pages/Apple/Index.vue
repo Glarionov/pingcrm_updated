@@ -11,9 +11,9 @@
           <option value="only">Only Trashed</option>
         </select>
       </search-filter>
-      <Link class="btn-indigo" href="/organizations/create">
+      <Link class="btn-indigo" href="/apples/create">
         <span>Create</span>
-        <span class="hidden md:inline">&nbsp;Organization</span>
+        <span class="hidden md:inline">&nbsp;Apple</span>
       </Link>
     </div>
     <div class="bg-white rounded-md shadow overflow-x-auto">
