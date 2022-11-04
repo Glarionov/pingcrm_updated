@@ -57,38 +57,18 @@ class addprops extends Command
      */
     public function handle()
     {
-//        /*s*/echo 'Testresource::class= <pre>' . print_r(Testresource::class, true). '</pre>'; //todo r
+        $basePath = 'app/Http/Resources/ConcreteResources/';
 
-        foreach (glob('app/Http/Resources/PageResources/*.php') as $file)
-        {
-            require_once $file;
+        foreach (glob("$basePath*") as $file) {
+//            require_once $file;
+            /*s*/
+            echo '$file= <pre>' . print_r($file, true) . '</pre>'; //todo r
 
-            /*s*/echo '$file= <pre>' . print_r($file, true). '</pre>'; //todo r
-
-            $class = str_replace(['app/', '/', '.php'], ['\\App\\', '\\', ''], $file);
-            $resource = new $class([]);
-
-//            // get the file name of the current file without the extension
-//            // which is essentially the class name
-//            $class = basename($file, '.php');
-//
-//            if (class_exists($class))
-//            {
-//                $obj = new $class;
-//                foreach(get_class_methods($obj) as $method)
-//                {
-//                    echo $method . '\n';
-//                }
-//            }
+            foreach (glob("$file/*Resource.php") as $file2) {
+                $class = basename($file2, '.php');
+                $resource = new $class([]);
+            }
         }
-
-//        $MyClasses = $this->classes_in_namespace('App\Http\Resources')
-//;
-
-//        /*s*/echo '$MyClasses= <pre>' . print_r($MyClasses, true). '</pre>'; //todo r
-
-
-//        $resource = new \App\Http\Resources\Testresource([]);
         return 0;
     }
 }

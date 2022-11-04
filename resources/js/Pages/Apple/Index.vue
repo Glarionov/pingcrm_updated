@@ -1,7 +1,39 @@
 <template>
   <div>
-    <Head title="Organizations"/>
-    <h1 class="mb-8 text-3xl font-bold">Organizations</h1>
+    <Head title="Apples"/>
+    <h1 class="mb-8 text-3xl font-bold">Apples</h1>
+
+<!--    <div class="filters">-->
+<!--      <form @submit.prevent="search">-->
+<!--        <div class="d-flex">-->
+<!--          <div class="col-2 d-flex">-->
+<!--            Size min:-->
+<!--            &lt;!&ndash;                        <input type="text" class="form-control-sm mx-2 w-25" v-model="filter.filter.size[0]">&ndash;&gt;-->
+<!--            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.size[0]">-->
+<!--          </div>-->
+
+<!--          <div class="col-2 d-flex">-->
+<!--            Size max:-->
+<!--            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.size[1]">-->
+<!--          </div>-->
+
+<!--          <div class="col-2 d-flex">-->
+<!--            Weight:-->
+<!--            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.weight">-->
+
+<!--          </div>-->
+<!--          <div class="col-2">-->
+<!--            <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>-->
+<!--          </div>-->
+<!--          &lt;!&ndash;                        <input type="text" class="form-control-sm mx-2 w-25" v-model="filter.filter.size[1]">&ndash;&gt;-->
+
+<!--        </div>-->
+
+<!--      </form>-->
+
+
+<!--    </div>-->
+
     <div class="flex items-center justify-between mb-6">
       <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset">
         <label class="block text-gray-700">Trashed:</label>

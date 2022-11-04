@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ApplesRequest;
+use App\Http\Requests\ConcreteRequests\ApplesRequest;
 use App\Http\Services\AppleService;
-use App\Http\Services\AppointmentService;
 
 class AppleController extends AbstractAdvancedResourceController
 {
