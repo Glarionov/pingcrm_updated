@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(input, inputIndex) in inputs" :key="inputIndex" class="form-group">
-      <FormElementDefaultTemplate v-model="this.$props.form[input.id]" :input-data="input"/>
+      <FormElementDefaultTemplate v-model="this.$props.form[input.id]" :input-data="input" :form="form"/>
     </div>
   </div>
 </template>
@@ -19,7 +19,12 @@ export default {
   props: ['inputs', 'form'],
   mounted() {
   },
-  emits: ['update:modelValue'],
+  methods: {
+    change() {
+      this.$emit('update:modelValue', {color: 'zzz'});
+    }
+  },
+  emits: ['update:form'],
 }
 </script>
 

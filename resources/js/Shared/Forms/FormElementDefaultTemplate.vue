@@ -1,7 +1,6 @@
 <template>
-  <FormElementDefaultWrapper :inputData="inputData">
-    modelValue1={{modelValue}}
-    <component :is="inputData.element" :inputData="inputData" v-model="modelValue"/>
+  <FormElementDefaultWrapper :inputData="inputData" :form="form">
+    <component :is="inputData.element" :inputData="inputData" v-model="inputVal"/>
   </FormElementDefaultWrapper>
 </template>
 
@@ -10,19 +9,31 @@
 import Input from "@/Shared/Forms/Input";
 import Textarea from "@/Shared/Forms/Textarea";
 import FormElementDefaultWrapper from "@/Shared/Forms/FormElementDefaultWrapper";
-
+import PassModelTest from "@/Test/PassModelTest";
 export default {
   name: "FormElementDefaultTemplate",
   components: {
     Input,
     Textarea,
-    FormElementDefaultWrapper
+    FormElementDefaultWrapper,
+    PassModelTest
   },
   props: {
     inputData: {
       type: Object
     },
-    modelValue: String
+    modelValue: String,
+    form: Object
+  },
+  computed: {
+    inputVal: {
+      get() {
+        return this.modelValue;
+      },
+      set(val) {
+        this.$emit('update:modelValue', val);
+      }
+    }
   },
   emits: ['update:modelValue'],
 }

@@ -9,6 +9,7 @@
     <div class="col-span-6">
       <slot></slot>
     </div>
+    <div v-if="form.errors[inputData.id]" class="form-error col-span-12">{{ form.errors[inputData.id] }}</div>
   </div>
 </template>
 
@@ -18,7 +19,8 @@ export default {
   props: {
     inputData: {
       type: Object
-    }
+    },
+    form: Object
   }
 }
 </script>

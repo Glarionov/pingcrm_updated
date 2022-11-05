@@ -1,12 +1,16 @@
 <template>
   <div class="pass-model">
-    <input v-model="ModelValue">
+    <input class="border" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
   </div>
 </template>
 
 <script>
 export default {
-  name: "PassModelTest"
+  name: "PassModelTest",
+  props: {
+    modelValue: String
+  },
+  emits: ['update:modelValue'],
 }
 </script>
 

@@ -21,10 +21,14 @@
     <tbody>
     <tr v-for="(mainObject, index) in mainObjects.data" :key="index" class="hover:bg-gray-100 focus-within:bg-gray-100">
       <td v-if="showSelectCheckboxes" class="border-t" scope="row">
-        <input v-model="selectedRows[mainObject.id]" type="checkbox">
+        <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+          <input v-model="selectedRows[mainObject.id]" type="checkbox">
+        </div>
       </td>
       <td v-if="showIds" class="border-t" scope="row">
-        {{ mainObject.id }}
+        <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+          {{ mainObject.id }}
+        </div>
       </td>
       <slot :mainObject="mainObject"  v-bind="mainObject"></slot>
     </tr>

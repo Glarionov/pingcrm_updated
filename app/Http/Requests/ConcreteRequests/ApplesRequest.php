@@ -11,7 +11,8 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
      * @var array
      */
     public static array $updateRequestRules = [
-//        'size' => ['integer', 'max:10', 'min:2'],
+        'size' => ['integer', 'max:10', 'min:2'],
+        'weight' => ['integer', 'max:101', 'min:1'],
 //        'type_id' => ['integer', 'exists:appointments_types,id'],
 //        'first_name' => ['string'],
 //        'last_name' => ['string'],
