@@ -14,4 +14,12 @@ class Apple extends Model
         'weight',
         'size'
     ];
+
+    /**
+     * Get the quality associated with the Apple.
+     */
+    public function quality(): object
+    {
+        return $this->hasOne(AppleQuality::class, 'id', 'quality_id');
+    }
 }

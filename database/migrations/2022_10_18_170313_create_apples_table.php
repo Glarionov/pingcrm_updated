@@ -13,11 +13,14 @@ class CreateApplesTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('apples');
         Schema::create('apples', function (Blueprint $table) {
             $table->id();
             $table->string('color')->nullable();
             $table->float('size')->nullable();
             $table->float('weight')->nullable();
+            $table->unsignedBigInteger('quality_id');
+            $table->foreign('quality_id')->references('id')->on('apple_qualities');
             $table->timestamps();
         });
     }

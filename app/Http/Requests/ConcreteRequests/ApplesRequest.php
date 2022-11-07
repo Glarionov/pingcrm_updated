@@ -3,6 +3,7 @@
 namespace App\Http\Requests\ConcreteRequests;
 
 use App\Http\Requests\AbstractUpdateOrCreateRequest;
+use App\Models\AppleQuality;
 
 class ApplesRequest extends AbstractUpdateOrCreateRequest
 {
@@ -13,6 +14,7 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
     public static array $updateRequestRules = [
         'size' => ['integer', 'max:10', 'min:2'],
         'weight' => ['integer', 'max:101', 'min:1'],
+        'quality_id' => ['integer', 'exists:apple_qualities,id']
 //        'type_id' => ['integer', 'exists:appointments_types,id'],
 //        'first_name' => ['string'],
 //        'last_name' => ['string'],
@@ -27,5 +29,9 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
     public static array $requiredToCreateFields = [
 //        'size',
         'color',
+    ];
+
+    public static array $selectBuilders = [
+        'apple_qualities' => ['text' => 'name', 'value' => 'id']
     ];
 }

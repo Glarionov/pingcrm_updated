@@ -30,6 +30,33 @@ let validationRules =
         "name": "weight",
         "value": ""
     },
+    "quality_id": {
+        "required": false,
+        "options": [
+            {
+                "text": "low",
+                "value": 1
+            },
+            {
+                "text": "medium",
+                "value": 2
+            },
+            {
+                "text": "high",
+                "value": 3
+            }
+        ],
+        "type": "number",
+        "id": "quality_id",
+        "attributes": {
+            "id": "quality_id"
+        },
+        "attributes_wo_value": [],
+        "element": "Select",
+        "label": "quality_id",
+        "name": "quality_id",
+        "value": ""
+    },
     "color": {
         "required": true,
         "type": "text",

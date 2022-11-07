@@ -10,10 +10,13 @@ import Input from "@/Shared/Forms/Input";
 import Textarea from "@/Shared/Forms/Textarea";
 import FormElementDefaultWrapper from "@/Shared/Forms/FormElementDefaultWrapper";
 import PassModelTest from "@/Test/PassModelTest";
+import Select from "@/Shared/Forms/Select";
+
 export default {
   name: "FormElementDefaultTemplate",
   components: {
     Input,
+    Select,
     Textarea,
     FormElementDefaultWrapper,
     PassModelTest

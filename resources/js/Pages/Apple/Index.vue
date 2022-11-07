@@ -1,61 +1,55 @@
 <template>
   <div>
-    <Head title="Apples"/>
+    <Head title="Apples" />
     <h1 class="mb-8 text-3xl font-bold">Apples</h1>
 
     <SearchFormsWrapper>
-      <SmallSearchElement v-model="filter.size[0]" label="Size min:"/>
-      <SmallSearchElement v-model="filter.size[1]" label="Size max:"/>
-      <SmallSearchElement v-model="filter.weight" label="Weight:"/>
-      <SmallSearchElement v-model="filter.color" label="Color:"/>
+      <SmallSearchElement v-model="filter.size[0]" label="Size min:" />
+      <SmallSearchElement v-model="filter.size[1]" label="Size max:" />
+      <SmallSearchElement v-model="filter.weight" label="Weight:" />
+      <SmallSearchElement v-model="filter.color" label="Color:" />
+      <SmallSearchElement v-model="filter.quality_id" label="Quality:" input-element="Select" :input-data="validationRules.quality_id"/>
     </SearchFormsWrapper>
 
-    <div class="flex items-center justify-between mb-6 mt-2">
-      <Link class="btn-indigo" href="/apples/create">
-        <span>Create</span>
-        <span class="hidden md:inline">&nbsp;Apple</span>
-      </Link>
+    <div class="justify-content-around d-flex flex-column mb-6 mt-2">
+      <div class="btn btn-success">
+        <Link href="/apples/create">
+          <span>Create</span>
+          <span class="hidden md:inline">&nbsp;Apple</span>
+        </Link>
+      </div>
+
     </div>
     <div class="bg-white rounded-md shadow overflow-x-auto">
       <BaseTableWrapper
-                :defaultColNames="defaultColNames"
-                                :mainObjects="mainObjects"
-                                :selectAll="selectAll"
-                                :selectedRows="selectedRows"
-                                :selectWord="selectWord"
-        >
-
+        :default-col-names="defaultColNames"
+        :main-objects="mainObjects"
+        :select-all="selectAll"
+        :selected-rows="selectedRows"
+        :select-word="selectWord"
+      >
         <template #default="{mainObject}">
-          <td class="border-t">
-            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-              {{ mainObject.color }}
-            </div>
-
-          </td>
-          <td class="border-t">
-            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-              {{ mainObject.size }}
-            </div>
-
-          </td>
-          <td class="border-t">
-            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-              {{ mainObject.weight }}
-            </div>
-          </td>
+          <TableCellsByObject :keys="['color', 'size', 'weight', 'quality']" :main-object="mainObject" />
         </template>
 
         <template #edit-buttons="{mainObject}">
-            <Link class="flex items-center px-4" :href="`/apples/${mainObject.id}/edit`" tabindex="-1">
-              <icon name="cheveron-right" class="block w-6 h-6 fill-gray-400" />
-            </Link>
+          <Link class="flex items-center px-4" :href="`/apples/${mainObject.id}/edit`" tabindex="-1">
+            <div class="btn btn-success">
+              Edit
+            </div>
+          </Link>
+          <Link class="flex items-center px-4" :href="`/apples/${mainObject.id}`" tabindex="-1">
+            <div class="btn btn-success">
+              Show
+            </div>
+          </Link>
         </template>
       </BaseTableWrapper>
     </div>
 
     <MassActionsWrapper>
-      <MassActionElement v-model="newSize" label="Set size:" :mainAction="setNewSize"/>
-      <MassActionElement v-model="newWeight" label="Set weight:" :mainAction="setNewWeight"/>
+      <MassActionElement v-model="newSize" label="Set size:" :main-action="setNewSize" />
+      <MassActionElement v-model="newWeight" label="Set weight:" :main-action="setNewWeight" />
       <form @submit.prevent="deleteSelected">
         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
       </form>
@@ -72,15 +66,18 @@ import throttle from 'lodash/throttle'
 import mapValues from 'lodash/mapValues'
 import Pagination from '@/Shared/Pagination'
 import SearchFilter from '@/Shared/SearchFilter'
-import SlotTest from "@/Test/SlotTest";
-import BaseTableWrapper from "@/Shared/Tables/BaseTableWrapper";
-import SmallSearchElement from "@/Shared/Search/SmallSearchElement";
-import SearchFormsWrapper from "@/Shared/Search/SearchFormsWrapper";
-import MassActionElement from "@/Shared/MassActions/MassActionElement";
-import MassActionsWrapper from "@/Shared/MassActions/MassActionsWrapper";
+import SlotTest from '@/Test/SlotTest'
+import BaseTableWrapper from '@/Shared/Tables/BaseTableWrapper'
+import SmallSearchElement from '@/Shared/Search/SmallSearchElement'
+import SearchFormsWrapper from '@/Shared/Search/SearchFormsWrapper'
+import MassActionElement from '@/Shared/MassActions/MassActionElement'
+import MassActionsWrapper from '@/Shared/MassActions/MassActionsWrapper'
+import TableCellsByObject from '@/Shared/Tables/TableCellsByObject'
+import validationRules from "@/FormArrays/Apples";
 
 export default {
   components: {
+    TableCellsByObject,
     MassActionsWrapper,
     Head,
     Icon,
@@ -91,7 +88,7 @@ export default {
     BaseTableWrapper,
     SmallSearchElement,
     SearchFormsWrapper,
-    MassActionElement
+    MassActionElement,
   },
   layout: Layout,
   props: {
@@ -101,48 +98,41 @@ export default {
     success: Boolean,
     error: String,
   },
-  computed: {
-    errorMessage() {
-      // eslint-disable-next-line no-prototype-builtins
-      return this.$page.props.hasOwnProperty('flash') ? this.$page.props.flash.errorMessage : '';
-    },
-    selectWord() {
-      return this.selectedAll ? 'Unselect' : 'Select';
-    }
-  },
   data() {
     return {
-      defaultColNames: ['Color', 'Size', 'Weight'],
+      defaultColNames: ['Color', 'Size', 'Weight', 'Quality'],
       selectedRows: [],
       selectedAll: false,
+      validationRules,
       filter: this.$inertia.form({
         color: null,
         size: [null, null],
-        weight: null
+        weight: null,
+        quality_id: null,
       }),
       massActionsForm: this.$inertia.form({
         newValues: {
-          size: null
+          size: null,
         },
         filter: {
-          id: null
-        }
+          id: null,
+        },
       }),
       setNewSizeForm: this.$inertia.form({
         newValues: {
-          size: null
+          size: null,
         },
         filter: {
-          id: null
-        }
+          id: null,
+        },
       }),
       setNewWeightForm: this.$inertia.form({
         newValues: {
           weight: null,
         },
         filter: {
-          id: null
-        }
+          id: null,
+        },
       }),
       newSize: null,
       newWeight: null,
@@ -153,6 +143,15 @@ export default {
 
       },
     }
+  },
+  computed: {
+    errorMessage() {
+      // eslint-disable-next-line no-prototype-builtins
+      return this.$page.props.hasOwnProperty('flash') ? this.$page.props.flash.errorMessage : ''
+    },
+    selectWord() {
+      return this.selectedAll ? 'Unselect' : 'Select'
+    },
   },
   watch: {
     form: {
@@ -167,46 +166,46 @@ export default {
       this.form = mapValues(this.form, () => null)
     },
     selectAll() {
-      let newValue = !this.selectedAll;
-      this.selectedRows = [];
+      let newValue = !this.selectedAll
+      this.selectedRows = []
       for (let index in this.mainObjects.data) {
-        this.selectedRows[this.mainObjects.data[index].id] = newValue;
+        this.selectedRows[this.mainObjects.data[index].id] = newValue
       }
-      this.selectedAll = newValue;
+      this.selectedAll = newValue
     },
     search() {
       this.filter.get('/api/apples', {
-        preserveState: true
-      });
+        preserveState: true,
+      })
     },
     getSelectedIds() {
       let filterId = []
       for (let id in this.selectedRows) {
         if (this.selectedRows[id]) {
-          filterId.push((id));
+          filterId.push((id))
         }
       }
-      return filterId;
+      return filterId
     },
     updateSelected(newValues) {
-      let newForm = {...this.massActionsForm, newValues: {}};
+      let newForm = {...this.massActionsForm, newValues: {}}
       for (let param in newValues) {
-        newForm.newValues[param] = newValues[param];
+        newForm.newValues[param] = newValues[param]
       }
 
-      newForm.filter.id = this.getSelectedIds();
+      newForm.filter.id = this.getSelectedIds()
 
-      newForm.put(`/api/apples`)
+      newForm.put('/api/apples')
     },
     setNewSize() {
-      this.updateSelected({size: this.newSize});
+      this.updateSelected({size: this.newSize})
     },
     setNewWeight() {
-      this.updateSelected({weight: this.newWeight});
+      this.updateSelected({weight: this.newWeight})
     },
     deleteSelected() {
-      this.massActionsForm.filter.id = this.getSelectedIds();
-      this.massActionsForm.delete('/api/apples');
+      this.massActionsForm.filter.id = this.getSelectedIds()
+      this.massActionsForm.delete('/api/apples')
     },
   },
 }

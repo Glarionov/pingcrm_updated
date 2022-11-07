@@ -123,11 +123,11 @@ class AbstractAdvancedResourceService extends AbstractResourceService
         $paginationResult = $baseQuery->paginate(static::$itemsPerPage);
 
         if (!empty(static::$mainCollection)) {
-            return new static::$mainCollection(
+            $paginationResult = new static::$mainCollection(
                 $paginationResult
             );
         }
-        return ['mainObjects' => $baseQuery->paginate(static::$itemsPerPage), 'filter' => $requestData['filter'] ?? []];
+        return ['mainObjects' => $paginationResult, 'filter' => $requestData['filter'] ?? []];
     }
 
     protected static function createResultFromObject($object)

@@ -128,7 +128,6 @@ abstract class AbstractResourceController extends Controller
     {
         $data = static::$mainService::show($id);
         return static::returnResult($data,  'Show', $request);
-//        return static::$mainService::show($id);
     }
 
     public function edit(Request $request, int $id)

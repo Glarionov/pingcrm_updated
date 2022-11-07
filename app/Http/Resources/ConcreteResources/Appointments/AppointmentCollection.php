@@ -6,5 +6,5 @@ use App\Http\Resources\AbstractCollection;
 
 class AppointmentCollection extends AbstractCollection
 {
-    public $collects = AppointmentResource::class;
+    public $collects = AppleResource::class;
 }

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Requests\AbstractUpdateOrCreateRequest;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class addforms extends Command
@@ -65,35 +66,56 @@ class addforms extends Command
 //                    $requiredFields[] = "'$requiredToCreateField'";
 //                }
 //                $fileContent .= implode(",\n", $requiredFields) . "\n];\n";
-/*s*/echo '$fileContent= <pre>' . print_r($fileContent, true). '</pre>'; //todo r
 
                 $fileContent .= "let validationRules = \n";
 
                 $fileArray = [];
                 foreach ($mainClass::generateInputRequestArray() as $param => $validationRules) {
 //                    $fileContent .= "$param:{\n";
-
-
                     $element = 'Input';
                     $paramContent = [];
                     $attributes = [];
                     $attributesWithoutValue = [];
                     $foundType = array_intersect( array_keys($typeFields) ,$validationRules);
-                    /*s*/echo '$foundType= <pre>' . print_r($foundType, true). '</pre>'; //todo r
 
                     $type = 'text';
                     if ($foundType) {
-                        /*s*/echo '$foundType= <pre>' . print_r($foundType, true). '</pre>'; //todo r
                         $type = $typeFields[array_pop($foundType)];
                     }
                     foreach ($validationRules as $validationRule) {
                         $valuedParams = ['max' => 'max', 'min' => 'min', 'before' => 'max', 'after' => 'min'];
                         foreach ($valuedParams as $valuedParam => $valuedParamForHTML) {
                             preg_match("#$valuedParam:(.*)#", $validationRule, $matches);
-                            /*s*/echo '$matches= <pre>' . print_r($matches, true). '</pre>'; //todo r
 
                             if ($matches) {
                                 $attributes[$valuedParamForHTML] = $matches[1];
+                            }
+                        }
+
+                        preg_match("#exists:(.*),(.*)#", $validationRule, $matches);
+
+                        if ($matches) {
+                            /*s*/echo '$matches= <pre>' . print_r($matches, true). '</pre>'; //todo r
+
+                            $table = $matches[1];
+
+                            $amountOfValues = DB::table($table)->count();
+                            /*s*/echo '$amountOfValues= <pre>' . print_r($amountOfValues, true). '</pre>'; //todo r
+
+                            if ($amountOfValues < 10) {
+                                $element = 'Select';
+                                $values = DB::table($table)->get();
+                                $selectBuilders = $mainClass::$selectBuilders;
+                                $options = [];
+                                foreach ($values as $value) {
+                                    $valueFieldValue = $value->{$selectBuilders[$table]['value']};
+                                    $textFieldValue = $value->{$selectBuilders[$table]['text']};
+
+                                    $options[] = ['text' => $textFieldValue, 'value' => $valueFieldValue];
+                                }
+                                $paramContent['options'] = $options;
+                            } else {
+                                $element = 'SelectSearch';
                             }
                         }
 
@@ -134,9 +156,6 @@ class addforms extends Command
 
                 $class = get_class($mainClass);
                 $resultFileName = preg_replace('#App\\\Http\\\Requests\\\ConcreteRequests\\\(.*)Request#', '$1', $class);
-
-                /*s*/echo '$class= <pre>' . print_r($class, true). '</pre>'; //todo r
-/*s*/echo '$resultFileName= <pre>' . print_r($resultFileName, true). '</pre>'; //todo r
 
                 file_put_contents("resources/js/FormArrays/$resultFileName.js", $fileContent);
             }

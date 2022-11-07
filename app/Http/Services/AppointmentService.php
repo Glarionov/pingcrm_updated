@@ -3,8 +3,8 @@
 namespace App\Http\Services;
 
 use App\Events\AppointmentCreated;
-use App\Http\Resources\ConcreteResources\Appointments\AppointmentCollection;
-use App\Http\Resources\ConcreteResources\Appointments\AppointmentResource;
+use App\Http\Resources\ConcreteResources\Appointments\AppleCollection;
+use App\Http\Resources\ConcreteResources\Appointments\AppleResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Cookie;
 
@@ -14,8 +14,8 @@ class AppointmentService extends AbstractAdvancedResourceService
 
     public static string $mainModel = Appointment::class;
 
-    protected static string $mainCollection = AppointmentCollection::class;
-    protected static string $mainResource = AppointmentResource::class;
+    protected static string $mainCollection = AppleCollection::class;
+    protected static string $mainResource = AppleResource::class;
 
     /**
      * Store a newly created resource in storage.
