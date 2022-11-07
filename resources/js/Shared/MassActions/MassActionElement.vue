@@ -1,20 +1,65 @@
 <template>
-  <div class="change-size col-2">
-
-    <form @submit.prevent="setNewSize">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3 mr-2">
+    <form @submit.prevent="mainAction">
       <div class="d-flex">
-        Set size:
-        <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="newSize">
-        <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
+        <div class="mb-2">
+          {{label}}
+        </div>
+        <div class="mb-2 ml-2">
+          <component :is="inputElement" :inputData="inputData" v-model="inputVal"/>
+        </div>
+        <div class="ml-2">
+          <button type="submit" class="btn btn-success">Submit</button>
       </div>
+      </div>
+
 
     </form>
   </div>
 </template>
 
 <script>
+
+import Input from "@/Shared/MassActions/Input";
+
 export default {
-  name: "MassActionElement"
+  name: "MassActionElement",
+  components: {
+    Input
+  },
+  props: {
+    label: String,
+    modelValue: String,
+    inputElement: {
+      type: String,
+      default: 'Input'
+    },
+    inputData: {
+      type: Object,
+      default: () => {return {type: 'text'}}
+    },
+    mainAction: {
+      type: Function
+    }
+  },
+  computed: {
+    inputVal: {
+      get() {
+        return this.modelValue;
+      },
+      set(val) {
+        this.$emit('update:modelValue', val);
+      }
+    }
+  },
+  emits: ['update:modelValue'],
+  methods: {
+    mainAction2() {
+
+      // todo r
+      this.$props.mainAction();
+    }
+  }
 }
 </script>
 

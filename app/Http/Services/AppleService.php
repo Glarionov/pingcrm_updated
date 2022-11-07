@@ -19,6 +19,7 @@ class AppleService extends AbstractAdvancedResourceService
     protected static array $listSearchParams = [
         'id' => ['list'],
         'weight' => ['simple'],
-        'size' => ['range']
+        'size' => ['range'],
+        'color' => ['like']
     ];
 }

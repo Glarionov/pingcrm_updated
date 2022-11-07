@@ -131,6 +131,12 @@ abstract class AbstractResourceController extends Controller
 //        return static::$mainService::show($id);
     }
 
+    public function edit(Request $request, int $id)
+    {
+        $data = static::$mainService::show($id);
+        return static::returnResult($data,  'Edit', $request);
+    }
+
     /**
      * Update the specified resource in storage.
      *

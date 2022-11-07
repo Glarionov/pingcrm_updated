@@ -7,6 +7,7 @@
       <SmallSearchElement v-model="filter.size[0]" label="Size min:"/>
       <SmallSearchElement v-model="filter.size[1]" label="Size max:"/>
       <SmallSearchElement v-model="filter.weight" label="Weight:"/>
+      <SmallSearchElement v-model="filter.color" label="Color:"/>
     </SearchFormsWrapper>
 
     <div class="flex items-center justify-between mb-6 mt-2">
@@ -16,71 +17,49 @@
       </Link>
     </div>
     <div class="bg-white rounded-md shadow overflow-x-auto">
-      <BaseTableWrapper v-slot="slotProps"
-
+      <BaseTableWrapper
                 :defaultColNames="defaultColNames"
                                 :mainObjects="mainObjects"
                                 :selectAll="selectAll"
                                 :selectedRows="selectedRows"
                                 :selectWord="selectWord"
         >
-                  <td class="border-t">
-                    <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-                      {{ slotProps.mainObject.color }}
-                    </div>
 
-                  </td>
-                  <td class="border-t">
-                    <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-                      {{ slotProps.mainObject.size }}
-                    </div>
+        <template #default="{mainObject}">
+          <td class="border-t">
+            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+              {{ mainObject.color }}
+            </div>
 
-                  </td>
-                  <td class="border-t">
-                    <div class="flex items-center px-6 py-4 focus:text-indigo-500">
-                      {{ slotProps.mainObject.weight }}
-                    </div>
+          </td>
+          <td class="border-t">
+            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+              {{ mainObject.size }}
+            </div>
 
-                  </td>
+          </td>
+          <td class="border-t">
+            <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+              {{ mainObject.weight }}
+            </div>
+          </td>
+        </template>
 
+        <template #edit-buttons="{mainObject}">
+            <Link class="flex items-center px-4" :href="`/apples/${mainObject.id}/edit`" tabindex="-1">
+              <icon name="cheveron-right" class="block w-6 h-6 fill-gray-400" />
+            </Link>
+        </template>
       </BaseTableWrapper>
     </div>
 
-    <div class="table-actions ">
-      With selected:
-      <div class="row">
-        <div class="change-size col-2">
-
-          <form @submit.prevent="setNewSize">
-            <div class="d-flex">
-              Set size:
-              <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="newSize">
-              <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
-            </div>
-
-          </form>
-        </div>
-        <div class="change-size col-2 offset-1">
-
-          <form @submit.prevent="setNewWeight">
-            <div class="d-flex">
-              Set weight:
-
-              <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="newWeight">
-              <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
-            </div>
-
-          </form>
-        </div>
-        <div class="change-size col-1 offset-1">
-          <form @submit.prevent="deleteSelected">
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-          </form>
-        </div>
-      </div>
-
-    </div>
-<!--    <pagination class="mt-6" :links="organizations.links"/>-->
+    <MassActionsWrapper>
+      <MassActionElement v-model="newSize" label="Set size:" :mainAction="setNewSize"/>
+      <MassActionElement v-model="newWeight" label="Set weight:" :mainAction="setNewWeight"/>
+      <form @submit.prevent="deleteSelected">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </MassActionsWrapper>
   </div>
 </template>
 
@@ -97,9 +76,12 @@ import SlotTest from "@/Test/SlotTest";
 import BaseTableWrapper from "@/Shared/Tables/BaseTableWrapper";
 import SmallSearchElement from "@/Shared/Search/SmallSearchElement";
 import SearchFormsWrapper from "@/Shared/Search/SearchFormsWrapper";
+import MassActionElement from "@/Shared/MassActions/MassActionElement";
+import MassActionsWrapper from "@/Shared/MassActions/MassActionsWrapper";
 
 export default {
   components: {
+    MassActionsWrapper,
     Head,
     Icon,
     Link,
@@ -108,7 +90,8 @@ export default {
     SlotTest,
     BaseTableWrapper,
     SmallSearchElement,
-    SearchFormsWrapper
+    SearchFormsWrapper,
+    MassActionElement
   },
   layout: Layout,
   props: {
@@ -133,10 +116,7 @@ export default {
       selectedRows: [],
       selectedAll: false,
       filter: this.$inertia.form({
-        // filter: {
-        //     size: [null, null],
-        //     weight: null
-        // }
+        color: null,
         size: [null, null],
         weight: null
       }),

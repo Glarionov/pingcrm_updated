@@ -9,3 +9,5 @@
 
 /* Utilities */
 @import 'tailwindcss/utilities';
+
+@import 'bootstrap';

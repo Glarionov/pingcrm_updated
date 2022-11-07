@@ -73,7 +73,6 @@ export default {
     },
     setInputs() {
       this.inputs = FormHelper.setNewLabels(validationRules, labels);
-      // this.inputs['last_name'].element = 'Textarea';
     }
   },
 }

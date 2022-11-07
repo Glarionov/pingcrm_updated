@@ -23,7 +23,7 @@ export default {
       type: Object
     },
     modelValue: String,
-    form: Object
+    form: Object,
   },
   computed: {
     inputVal: {

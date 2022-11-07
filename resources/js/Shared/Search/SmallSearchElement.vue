@@ -3,16 +3,9 @@
     <div class="mb-2">
       {{label}}
     </div>
-
-    <!--                        <input type="text" class="form-control-sm mx-2 w-25" v-model="filter.filter.size[0]">-->
     <input type="text"
-           class="form-control form-control-sm w-25"
+           class="form-control form-control-sm w-50"
            v-model="inputVal">
-
-    <!--            <input class="relative px-6 py-3 w-full rounded-r focus:shadow-outline"-->
-    <!--                   autocomplete="off" type="text" name="search" placeholder="Search…" -->
-    <!--                   :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />-->
-
   </div>
 </template>
 

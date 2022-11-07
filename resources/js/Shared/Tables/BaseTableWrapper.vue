@@ -16,6 +16,9 @@
       >
         {{ defaultColName }}
       </th>
+      <th v-if="showEditButtons" class="pb-4 pt-6 px-6" scope="col">
+        Actions
+      </th>
     </tr>
     </thead>
     <tbody>
@@ -30,7 +33,15 @@
           {{ mainObject.id }}
         </div>
       </td>
-      <slot :mainObject="mainObject"  v-bind="mainObject"></slot>
+      <slot :mainObject="mainObject"  v-bind="mainObject" ></slot>
+
+      <td v-if="showEditButtons" class="border-t" scope="row">
+        <div class="flex items-center px-6 py-4 focus:text-indigo-500">
+          <slot name="edit-buttons" :mainObject="mainObject">
+
+          </slot>
+        </div>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -46,6 +57,10 @@ export default {
       default: true
     },
     showSelectCheckboxes: {
+      type: Boolean,
+      default: true
+    },
+    showEditButtons: {
       type: Boolean,
       default: true
     },

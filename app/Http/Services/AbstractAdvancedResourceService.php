@@ -57,31 +57,32 @@ class AbstractAdvancedResourceService extends AbstractResourceService
                     foreach ($valuesList as $value) {
                         $paramQuery->orWhere(function($paramSubQuery) use ($param, $value, $paramConfig, $isStringData) {
                             $filter = [];
-                            $isSimple = empty($paramConfig) || !in_array('range', $paramConfig);
-                            if ($isSimple) {
-                                $filter[] = [$param, $value];
-                            } else {
-                                if (in_array('range', $paramConfig)) {
-                                    if ($isStringData && is_string($value)) {
-                                        $values = explode('-', $value);
-                                    } else {
-                                        $values = $value;
-                                    }
 
-                                    $min = $values[0];
-                                    $max = $values[1];
-                                    if (!empty($min) || $min === 0) {
-                                        $filter[] = [$param, '>=', $min];
-                                    }
-                                    if (!empty($max) || $max === 0) {
-                                        $filter[] = [$param, '<=', $max];
-                                    }
+                            if (in_array('range', $paramConfig)) {
+                                if ($isStringData && is_string($value)) {
+                                    $values = explode('-', $value);
+                                } else {
+                                    $values = $value;
+                                }
+
+                                $min = $values[0];
+                                $max = $values[1];
+                                if (!empty($min) || $min === 0) {
+                                    $filter[] = [$param, '>=', $min];
+                                }
+                                if (!empty($max) || $max === 0) {
+                                    $filter[] = [$param, '<=', $max];
+                                }
+                            } else {
+                                if (in_array('like', $paramConfig)) {
+                                    $filter[] = [$param, 'like', "%$value%"];
+                                } else {
+                                    $filter[] = [$param, $value];
                                 }
                             }
                             if (!empty($filter)) {
                                 $paramSubQuery->orWhere($filter);
                             }
-
                         });
                     }
                 }
@@ -137,7 +138,7 @@ class AbstractAdvancedResourceService extends AbstractResourceService
             );
         }
 
-        return ['success' => true, 'data' => $object];
+        return ['success' => true, 'mainObject' => $object];
     }
 
     /**
@@ -185,7 +186,7 @@ class AbstractAdvancedResourceService extends AbstractResourceService
         if (!$objectData['success']) {
             return $objectData;
         }
-        $object = $objectData['data'];
+        $object = $objectData['mainObject'];
 
         $object->fill($requestData);
         $object->save();
@@ -229,7 +230,7 @@ class AbstractAdvancedResourceService extends AbstractResourceService
         if (!$objectData['success']) {
             return $objectData;
         }
-        $object = $objectData['data'];
+        $object = $objectData['mainObject'];
         $object->delete();
 
         return ['success' => true];
