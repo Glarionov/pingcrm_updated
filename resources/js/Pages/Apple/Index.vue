@@ -3,46 +3,13 @@
     <Head title="Apples"/>
     <h1 class="mb-8 text-3xl font-bold">Apples</h1>
 
-    <div class="filters">
-      <form @submit.prevent="search">
-        <div class="d-flex">
-          <div class="col-2 d-flex">
-            Size min:
-            <!--                        <input type="text" class="form-control-sm mx-2 w-25" v-model="filter.filter.size[0]">-->
-            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.size[0]">
-          </div>
+    <SearchFormsWrapper>
+      <SmallSearchElement v-model="filter.size[0]" label="Size min:"/>
+      <SmallSearchElement v-model="filter.size[1]" label="Size max:"/>
+      <SmallSearchElement v-model="filter.weight" label="Weight:"/>
+    </SearchFormsWrapper>
 
-          <div class="col-2 d-flex">
-            Size max:
-            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.size[1]">
-          </div>
-
-          <div class="col-2 d-flex">
-            Weight:
-            <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="filter.weight">
-
-          </div>
-          <div class="col-2">
-            <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
-          </div>
-          <!--                        <input type="text" class="form-control-sm mx-2 w-25" v-model="filter.filter.size[1]">-->
-
-        </div>
-
-      </form>
-
-
-    </div>
-
-    <div class="flex items-center justify-between mb-6">
-      <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset">
-        <label class="block text-gray-700">Trashed:</label>
-        <select v-model="form.trashed" class="form-select mt-1 w-full">
-          <option :value="null"/>
-          <option value="with">With Trashed</option>
-          <option value="only">Only Trashed</option>
-        </select>
-      </search-filter>
+    <div class="flex items-center justify-between mb-6 mt-2">
       <Link class="btn-indigo" href="/apples/create">
         <span>Create</span>
         <span class="hidden md:inline">&nbsp;Apple</span>
@@ -77,26 +44,41 @@
                   </td>
 
       </BaseTableWrapper>
-<!--      <BaseTableWrapper-->
-<!--        v-slot="slotProps" :defaultColNames="this.defaultColNames"-->
-<!--                        :mainObjects="mainObjects"-->
-<!--                        :selectAll="selectAll"-->
-<!--                        :selectedRows="selectedRows"-->
-<!--                        :selectWord="selectWord"-->
-<!--      >-->
-<!--        <template v-if="slotProps.hasOwnProperty('mainObject')">-->
-<!--          <td class="border-t">-->
-<!--            {{ slotProps.mainObject.color }}-->
-<!--          </td>-->
-<!--          <td class="border-t">-->
-<!--            {{ slotProps.mainObject.size }}-->
-<!--          </td>-->
-<!--          <td class="border-t">-->
-<!--            {{ slotProps.mainObject.weight }}-->
-<!--          </td>-->
-<!--        </template>-->
+    </div>
 
-<!--      </BaseTableWrapper>-->
+    <div class="table-actions ">
+      With selected:
+      <div class="row">
+        <div class="change-size col-2">
+
+          <form @submit.prevent="setNewSize">
+            <div class="d-flex">
+              Set size:
+              <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="newSize">
+              <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
+            </div>
+
+          </form>
+        </div>
+        <div class="change-size col-2 offset-1">
+
+          <form @submit.prevent="setNewWeight">
+            <div class="d-flex">
+              Set weight:
+
+              <input type="text" class="form-control form-control-sm mx-2 w-25" v-model="newWeight">
+              <button type="submit" class="btn btn-success btn-sm ml-1">Submit</button>
+            </div>
+
+          </form>
+        </div>
+        <div class="change-size col-1 offset-1">
+          <form @submit.prevent="deleteSelected">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+
     </div>
 <!--    <pagination class="mt-6" :links="organizations.links"/>-->
   </div>
@@ -113,6 +95,8 @@ import Pagination from '@/Shared/Pagination'
 import SearchFilter from '@/Shared/SearchFilter'
 import SlotTest from "@/Test/SlotTest";
 import BaseTableWrapper from "@/Shared/Tables/BaseTableWrapper";
+import SmallSearchElement from "@/Shared/Search/SmallSearchElement";
+import SearchFormsWrapper from "@/Shared/Search/SearchFormsWrapper";
 
 export default {
   components: {
@@ -122,7 +106,9 @@ export default {
     Pagination,
     SearchFilter,
     SlotTest,
-    BaseTableWrapper
+    BaseTableWrapper,
+    SmallSearchElement,
+    SearchFormsWrapper
   },
   layout: Layout,
   props: {
@@ -178,12 +164,13 @@ export default {
           id: null
         }
       }),
+      newSize: null,
+      newWeight: null,
       // form: this.$inertia.form({}),
       form: {
         search: this.filters? this.filters.search: null,
         trashed: this.filters? this.filters.trashed: null,
-        newSize: null,
-        newWeight: null,
+
       },
     }
   },
@@ -211,6 +198,35 @@ export default {
       this.filter.get('/api/apples', {
         preserveState: true
       });
+    },
+    getSelectedIds() {
+      let filterId = []
+      for (let id in this.selectedRows) {
+        if (this.selectedRows[id]) {
+          filterId.push((id));
+        }
+      }
+      return filterId;
+    },
+    updateSelected(newValues) {
+      let newForm = {...this.massActionsForm, newValues: {}};
+      for (let param in newValues) {
+        newForm.newValues[param] = newValues[param];
+      }
+
+      newForm.filter.id = this.getSelectedIds();
+
+      newForm.put(`/api/apples`)
+    },
+    setNewSize() {
+      this.updateSelected({size: this.newSize});
+    },
+    setNewWeight() {
+      this.updateSelected({weight: this.newWeight});
+    },
+    deleteSelected() {
+      this.massActionsForm.filter.id = this.getSelectedIds();
+      this.massActionsForm.delete('/api/apples');
     },
   },
 }

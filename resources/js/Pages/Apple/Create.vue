@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Head title="Create Organization"/>
+    <Head title="Create Apple"/>
     <h1 class="mb-8 text-3xl font-bold">
       <Link class="text-indigo-400 hover:text-indigo-600" href="/apples">Apples</Link>
       <span class="text-indigo-400 font-medium">/</span> Create
@@ -16,6 +16,8 @@
           </div>
         </form>
       </div>
+
+      <flash-messages />
     </div>
   </div>
 </template>
@@ -31,7 +33,8 @@ import validationRules from "@/FormArrays/Apples";
 import FormHelper from "@/Helpers/FormHelper";
 import PassModelTest from "@/Test/PassModelTest";
 import FormElementDefaultTemplate from "@/Shared/Forms/FormElementDefaultTemplate";
-
+import FlashMessages from '@/Shared/FlashMessages'
+import DefaultLayout from "@/Shared/DefaultLayout";
 let labels = {
   first_name: 'First name',
   last_name: 'Last name',
@@ -46,9 +49,10 @@ export default {
     SelectInput,
     TextInput,
     FormConstructor,
-    FormElementDefaultTemplate
+    FormElementDefaultTemplate,
+    FlashMessages
   },
-  // layout: Layout,
+  layout: DefaultLayout,
   remember: 'form',
   created() {
     this.setInputs();
