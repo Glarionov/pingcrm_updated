@@ -7,4 +7,22 @@ export default class FormHelper {
     }
     return inputs;
   }
+
+  static setDefaultValues(inputs) {
+      let result = {};
+      for (let param in inputs) {
+          result[param] = null;
+      }
+      return result;
+  }
+
+    static setValuesFromObjects(inputs, mainObject) {
+        let result = {};
+        for (let param in inputs) {
+            result[param] = mainObject[param];
+        }
+        return result;
+    }
+
+
 }

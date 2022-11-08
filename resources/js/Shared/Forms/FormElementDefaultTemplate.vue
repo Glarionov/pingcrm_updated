@@ -25,7 +25,7 @@ export default {
     inputData: {
       type: Object
     },
-    modelValue: String,
+    modelValue: {},
     form: Object,
   },
   computed: {

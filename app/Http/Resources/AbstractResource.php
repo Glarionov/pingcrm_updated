@@ -50,6 +50,10 @@ abstract class AbstractResource extends JsonResource
 
             foreach ($fieldChain as $chainElement) {
                 $currentPointer = $currentPointer->{$chainElement};
+                if (empty($currentPointer)) {
+                    $currentPointer = null;
+                    break;
+                }
             }
 
             $result[$field] = $currentPointer;

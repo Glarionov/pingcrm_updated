@@ -19,7 +19,9 @@ class CreateApplesTable extends Migration
             $table->string('color')->nullable();
             $table->float('size')->nullable();
             $table->float('weight')->nullable();
-            $table->unsignedBigInteger('quality_id');
+            $table->boolean('is_eaten')->nullable();
+            $table->string('image')->nullable();
+            $table->unsignedBigInteger('quality_id')->nullable();
             $table->foreign('quality_id')->references('id')->on('apple_qualities');
             $table->timestamps();
         });

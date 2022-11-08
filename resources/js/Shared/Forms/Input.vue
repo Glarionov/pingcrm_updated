@@ -12,7 +12,7 @@ export default {
     inputData: {
       type: Object
     },
-    modelValue: String
+    modelValue: {}
   },
   computed: {
     cssClass() {

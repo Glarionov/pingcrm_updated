@@ -18,7 +18,7 @@ export default {
     inputData: {
       type: Object
     },
-    modelValue: String
+    modelValue: {}
   },
   emits: ['update:modelValue'],
 }

@@ -5,7 +5,7 @@
     </div>
     <div class="found" v-else>
       <div class="flex flex-wrap -mb-8 -mr-6 p-8">
-        <form @submit.prevent="store">
+        <form @submit.prevent="update">
           <FormConstructor  :inputs="inputs"
                             v-model:form="form"
                             :values="mainObject"
@@ -43,16 +43,21 @@ export default {
   data() {
     return {
       inputs: FormHelper.setNewLabels(validationRules, labels),
-      form: this.$inertia.form({
-        color: this.$props.mainObject.color,
-        size:  this.$props.mainObject.size,
-        weight:  this.$props.mainObject.weight,
-      }),
+      form: this.$inertia.form(
+        FormHelper.setValuesFromObjects(validationRules, this.$props.mainObject)
+        // color: this.$props.mainObject.color,
+        // size:  this.$props.mainObject.size,
+        // weight:  this.$props.mainObject.weight,
+      ),
     }
   },
   methods: {
     setInputs() {
       this.inputs = FormHelper.setNewLabels(validationRules, labels);
+    },
+    update() {
+      this.form.put('/api/apples');
+      console.log('UPDATE1')
     }
   }
 }

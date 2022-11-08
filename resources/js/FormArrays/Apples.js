@@ -2,20 +2,6 @@ let validationRules =
 {
     "size": {
         "required": false,
-        "options": [
-            {
-                "text": "Not matter",
-                "value": 0
-            },
-            {
-                "text": "No",
-                "value": 1
-            },
-            {
-                "text": "Yes",
-                "value": 2
-            }
-        ],
         "type": "number",
         "id": "size",
         "attributes": {
@@ -23,27 +9,13 @@ let validationRules =
             "min": "2",
             "id": "size"
         },
-        "element": "select",
+        "element": "Input",
         "label": "size",
         "name": "size",
         "value": ""
     },
     "weight": {
         "required": false,
-        "options": [
-            {
-                "text": "Not matter",
-                "value": 0
-            },
-            {
-                "text": "No",
-                "value": 1
-            },
-            {
-                "text": "Yes",
-                "value": 2
-            }
-        ],
         "type": "number",
         "id": "weight",
         "attributes": {
@@ -51,7 +23,7 @@ let validationRules =
             "min": "1",
             "id": "weight"
         },
-        "element": "select",
+        "element": "Input",
         "label": "weight",
         "name": "weight",
         "value": ""
@@ -60,16 +32,16 @@ let validationRules =
         "required": false,
         "options": [
             {
-                "text": "Not matter",
-                "value": 0
-            },
-            {
-                "text": "No",
+                "text": "low",
                 "value": 1
             },
             {
-                "text": "Yes",
+                "text": "medium",
                 "value": 2
+            },
+            {
+                "text": "high",
+                "value": 3
             }
         ],
         "type": "number",
@@ -77,7 +49,7 @@ let validationRules =
         "attributes": {
             "id": "quality_id"
         },
-        "element": "select",
+        "element": "Select",
         "label": "quality_id",
         "name": "quality_id",
         "value": ""
@@ -87,7 +59,7 @@ let validationRules =
         "options": [
             {
                 "text": "Not matter",
-                "value": 0
+                "value": ""
             },
             {
                 "text": "No",
@@ -108,29 +80,27 @@ let validationRules =
         "name": "is_eaten",
         "value": ""
     },
+    "image": {
+        "required": false,
+        "type": "file",
+        "id": "image",
+        "attributes": {
+            "id": "image"
+        },
+        "element": "Input",
+        "label": "image",
+        "name": "image",
+        "value": ""
+    },
     "color": {
         "required": true,
-        "options": [
-            {
-                "text": "Not matter",
-                "value": 0
-            },
-            {
-                "text": "No",
-                "value": 1
-            },
-            {
-                "text": "Yes",
-                "value": 2
-            }
-        ],
         "type": "text",
         "id": "color",
         "attributes": {
             "required": "1",
             "id": "color"
         },
-        "element": "select",
+        "element": "Input",
         "label": "color",
         "name": "color",
         "value": ""

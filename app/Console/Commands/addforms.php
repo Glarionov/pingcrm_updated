@@ -96,13 +96,9 @@ class addforms extends Command
                         preg_match("#exists:(.*),(.*)#", $validationRule, $matches);
 
                         if ($matches) {
-                            /*s*/echo '$matches= <pre>' . print_r($matches, true). '</pre>'; //todo r
-
                             $table = $matches[1];
 
                             $amountOfValues = DB::table($table)->count();
-                            /*s*/echo '$amountOfValues= <pre>' . print_r($amountOfValues, true). '</pre>'; //todo r
-
                             if ($amountOfValues < 10) {
                                 $element = 'Select';
                                 $values = DB::table($table)->get();
@@ -120,27 +116,33 @@ class addforms extends Command
                             }
                         }
 
-                        if ($validationRule == 'required') {
-                            $attributes['required'] = '1';
-                            $paramContent['required'] = true;
-                        }
+                        switch ($validationRule) {
+                            case 'file': case 'image':
+                                $type = 'file';
+                                break;
 
-                        if ($validationRule == 'boolean') {
-                            $boolean = true;
+                            case 'required':
+                                $attributes['required'] = '1';
+                                $paramContent['required'] = true;
+                                break;
+
+                            case 'boolean':
+                                $boolean = true;
                         }
                     }
 
-                    if ($boolean && $paramContent['required']) {
-                        $type = 'checkbox';
-                    } else {
-                        $element = 'select';
-                        $paramContent['options'] = [
-                                ['text' => 'Not matter', 'value' => 0],
+                    if ($boolean) {
+                        if ($paramContent['required']) {
+                            $type = 'checkbox';
+                        } else {
+                            $element = 'select';
+                            $paramContent['options'] = [
+                                ['text' => 'Not matter', 'value' => ''],
                                 ['text' => 'No', 'value' => 1],
                                 ['text' => 'Yes', 'value' => 2],
                             ];
+                        }
                     }
-
 
                     if ($type) {
 //                        $fileContent .= "type: $type,\n";

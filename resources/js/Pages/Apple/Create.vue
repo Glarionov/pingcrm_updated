@@ -60,12 +60,16 @@ export default {
   data() {
     return {
       inputs: FormHelper.setNewLabels(validationRules, labels),
-      form: this.$inertia.form({
-        color: null,
-        size: null,
-        weight: null,
-        is_eaten: null
-      }),
+      form: this.$inertia.form(
+        FormHelper.setDefaultValues(validationRules)
+      //   {
+      //   color: null,
+      //   size: null,
+      //   weight: null,
+      //   is_eaten: null,
+      //   quality_id: null
+      // }
+      ),
     }
   },
   methods: {
