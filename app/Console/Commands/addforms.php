@@ -71,11 +71,12 @@ class addforms extends Command
 
                 $fileArray = [];
                 foreach ($mainClass::generateInputRequestArray() as $param => $validationRules) {
+
 //                    $fileContent .= "$param:{\n";
                     $element = 'Input';
-                    $paramContent = [];
+                    $paramContent = ['required' => false];
                     $attributes = [];
-                    $attributesWithoutValue = [];
+                    $boolean = false;
                     $foundType = array_intersect( array_keys($typeFields) ,$validationRules);
 
                     $type = 'text';
@@ -120,15 +121,25 @@ class addforms extends Command
                         }
 
                         if ($validationRule == 'required') {
-                            $attributesWithoutValue[] = 'required';
                             $attributes['required'] = '1';
                             $paramContent['required'] = true;
-                        } else {
-                            $paramContent['required'] = false;
                         }
 
+                        if ($validationRule == 'boolean') {
+                            $boolean = true;
+                        }
                     }
 
+                    if ($boolean && $paramContent['required']) {
+                        $type = 'checkbox';
+                    } else {
+                        $element = 'select';
+                        $paramContent['options'] = [
+                                ['text' => 'Not matter', 'value' => 0],
+                                ['text' => 'No', 'value' => 1],
+                                ['text' => 'Yes', 'value' => 2],
+                            ];
+                    }
 
 
                     if ($type) {
@@ -140,7 +151,6 @@ class addforms extends Command
                     $attributes['id'] = $param;
                     $paramContent['id'] = $param;
                     $paramContent['attributes'] = $attributes;
-                    $paramContent['attributes_wo_value'] = $attributesWithoutValue;
                     $paramContent['element'] = $element;
                     $paramContent['label'] = $param;
                     $paramContent['name'] = $param;

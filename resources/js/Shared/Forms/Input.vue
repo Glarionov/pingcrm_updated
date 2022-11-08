@@ -1,5 +1,5 @@
 <template>
-  <input :type="inputData.type ?? 'text'" class="form-input border" v-bind="{ ...inputData.attributes ?? {}}" :name="inputData.name ?? null"
+  <input :type="inputData.type ?? 'text'" :class="inputData.class ?? cssClass" v-bind="{ ...inputData.attributes ?? {}}" :name="inputData.name ?? null"
          :id="inputData.id ?? null"
          :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
   >
@@ -13,6 +13,14 @@ export default {
       type: Object
     },
     modelValue: String
+  },
+  computed: {
+    cssClass() {
+      if (this.$props.inputData.type === 'checkbox') {
+        return '';
+      }
+      return 'form-control';
+    }
   },
   emits: ['update:modelValue'],
 }

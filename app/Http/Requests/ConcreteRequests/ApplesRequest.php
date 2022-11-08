@@ -14,7 +14,8 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
     public static array $updateRequestRules = [
         'size' => ['integer', 'max:10', 'min:2'],
         'weight' => ['integer', 'max:101', 'min:1'],
-        'quality_id' => ['integer', 'exists:apple_qualities,id']
+        'quality_id' => ['integer', 'exists:apple_qualities,id'],
+        'is_eaten' => ['boolean']
 //        'type_id' => ['integer', 'exists:appointments_types,id'],
 //        'first_name' => ['string'],
 //        'last_name' => ['string'],
@@ -29,6 +30,7 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
     public static array $requiredToCreateFields = [
 //        'size',
         'color',
+//        'is_eaten'
     ];
 
     public static array $selectBuilders = [

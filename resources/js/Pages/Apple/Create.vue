@@ -64,6 +64,7 @@ export default {
         color: null,
         size: null,
         weight: null,
+        is_eaten: null
       }),
     }
   },

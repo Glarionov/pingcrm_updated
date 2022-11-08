@@ -48,8 +48,8 @@
     </div>
 
     <MassActionsWrapper>
-      <MassActionElement v-model="newSize" label="Set size:" :main-action="setNewSize" />
-      <MassActionElement v-model="newWeight" label="Set weight:" :main-action="setNewWeight" />
+      <MassActionElement v-model="massUpdateValues.size" label="Set size:" :main-action="setNewSize" />
+      <MassActionElement v-model="massUpdateValues.weight" label="Set weight:" :main-action="setNewWeight" />
       <form @submit.prevent="deleteSelected">
         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
       </form>
@@ -58,51 +58,29 @@
 </template>
 
 <script>
-import {Head, Link} from '@inertiajs/inertia-vue3'
-import Icon from '@/Shared/Icon'
-import pickBy from 'lodash/pickBy'
+
 import Layout from '@/Shared/Layout'
-import throttle from 'lodash/throttle'
-import mapValues from 'lodash/mapValues'
-import Pagination from '@/Shared/Pagination'
-import SearchFilter from '@/Shared/SearchFilter'
-import SlotTest from '@/Test/SlotTest'
-import BaseTableWrapper from '@/Shared/Tables/BaseTableWrapper'
-import SmallSearchElement from '@/Shared/Search/SmallSearchElement'
-import SearchFormsWrapper from '@/Shared/Search/SearchFormsWrapper'
-import MassActionElement from '@/Shared/MassActions/MassActionElement'
-import MassActionsWrapper from '@/Shared/MassActions/MassActionsWrapper'
-import TableCellsByObject from '@/Shared/Tables/TableCellsByObject'
 import validationRules from "@/FormArrays/Apples";
+import IndexMixin from "@/Mixins/ResourceMixins/IndexMixin";
 
 export default {
-  components: {
-    TableCellsByObject,
-    MassActionsWrapper,
-    Head,
-    Icon,
-    Link,
-    Pagination,
-    SearchFilter,
-    SlotTest,
-    BaseTableWrapper,
-    SmallSearchElement,
-    SearchFormsWrapper,
-    MassActionElement,
-  },
+
   layout: Layout,
   props: {
     filters: Object,
-    organizations: Object,
     mainObjects: Object,
     success: Boolean,
     error: String,
   },
   data() {
     return {
+      baseApiUrl: '/api/apples',
+      baseUrl: '/apples',
+      massUpdateValues: {
+        size: null,
+        weight: null,
+      },
       defaultColNames: ['Color', 'Size', 'Weight', 'Quality'],
-      selectedRows: [],
-      selectedAll: false,
       validationRules,
       filter: this.$inertia.form({
         color: null,
@@ -111,102 +89,18 @@ export default {
         quality_id: null,
       }),
       massActionsForm: this.$inertia.form({
-        newValues: {
-          size: null,
-        },
         filter: {
           id: null,
         },
       }),
-      setNewSizeForm: this.$inertia.form({
-        newValues: {
-          size: null,
-        },
-        filter: {
-          id: null,
-        },
-      }),
-      setNewWeightForm: this.$inertia.form({
-        newValues: {
-          weight: null,
-        },
-        filter: {
-          id: null,
-        },
-      }),
-      newSize: null,
-      newWeight: null,
-      // form: this.$inertia.form({}),
       form: {
         search: this.filters? this.filters.search: null,
         trashed: this.filters? this.filters.trashed: null,
-
       },
     }
   },
-  computed: {
-    errorMessage() {
-      // eslint-disable-next-line no-prototype-builtins
-      return this.$page.props.hasOwnProperty('flash') ? this.$page.props.flash.errorMessage : ''
-    },
-    selectWord() {
-      return this.selectedAll ? 'Unselect' : 'Select'
-    },
-  },
-  watch: {
-    form: {
-      deep: true,
-      handler: throttle(function () {
-        this.$inertia.get('/organizations', pickBy(this.form), {preserveState: true})
-      }, 150),
-    },
-  },
+  mixins: [IndexMixin],
   methods: {
-    reset() {
-      this.form = mapValues(this.form, () => null)
-    },
-    selectAll() {
-      let newValue = !this.selectedAll
-      this.selectedRows = []
-      for (let index in this.mainObjects.data) {
-        this.selectedRows[this.mainObjects.data[index].id] = newValue
-      }
-      this.selectedAll = newValue
-    },
-    search() {
-      this.filter.get('/api/apples', {
-        preserveState: true,
-      })
-    },
-    getSelectedIds() {
-      let filterId = []
-      for (let id in this.selectedRows) {
-        if (this.selectedRows[id]) {
-          filterId.push((id))
-        }
-      }
-      return filterId
-    },
-    updateSelected(newValues) {
-      let newForm = {...this.massActionsForm, newValues: {}}
-      for (let param in newValues) {
-        newForm.newValues[param] = newValues[param]
-      }
-
-      newForm.filter.id = this.getSelectedIds()
-
-      newForm.put('/api/apples')
-    },
-    setNewSize() {
-      this.updateSelected({size: this.newSize})
-    },
-    setNewWeight() {
-      this.updateSelected({weight: this.newWeight})
-    },
-    deleteSelected() {
-      this.massActionsForm.filter.id = this.getSelectedIds()
-      this.massActionsForm.delete('/api/apples')
-    },
   },
 }
 </script>
