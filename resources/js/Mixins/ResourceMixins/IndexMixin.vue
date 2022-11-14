@@ -3,17 +3,20 @@
 </template>
 
 <script>
-import TableCellsByObject from "@/Shared/Tables/TableCellsByObject";
-import MassActionsWrapper from "@/Shared/MassActions/MassActionsWrapper";
-import {Head, Link} from "@inertiajs/inertia-vue3";
-import Icon from "@/Shared/Icon";
-import Pagination from "@/Shared/Pagination";
-import SearchFilter from "@/Shared/SearchFilter";
-import SlotTest from "@/Test/SlotTest";
-import BaseTableWrapper from "@/Shared/Tables/BaseTableWrapper";
-import SmallSearchElement from "@/Shared/Search/SmallSearchElement";
-import SearchFormsWrapper from "@/Shared/Search/SearchFormsWrapper";
-import MassActionElement from "@/Shared/MassActions/MassActionElement";
+import TableCellsByObject from '@/Shared/Tables/TableCellsByObject'
+import MassActionsWrapper from '@/Shared/MassActions/MassActionsWrapper'
+import {Head, Link, useForm} from '@inertiajs/inertia-vue3'
+import Icon from '@/Shared/Icon'
+import Pagination from '@/Shared/Pagination'
+import SearchFilter from '@/Shared/SearchFilter'
+import SlotTest from '@/Test/SlotTest'
+import BaseTableWrapper from '@/Shared/Tables/BaseTableWrapper'
+import SmallSearchElement from '@/Shared/Search/SmallSearchElement'
+import SearchFormsWrapper from '@/Shared/Search/SearchFormsWrapper'
+import MassActionElement from '@/Shared/MassActions/MassActionElement'
+import Layout from '@/Shared/Layout'
+import DefaultLayout from "@/Shared/DefaultLayout";
+import TableCellImage from "@/Shared/Tables/TableCellImage";
 
 export default {
   name: "IndexMixin",
@@ -30,16 +33,30 @@ export default {
     SmallSearchElement,
     SearchFormsWrapper,
     MassActionElement,
+    TableCellImage
+  },
+  layout: DefaultLayout,
+  props: {
+    filters: Object,
+    mainObjects: Object,
+    success: Boolean,
+    error: String,
   },
   data() {
     return {
       selectedRows: [],
       selectedAll: false,
+      massActionsForm: useForm({
+        filter: {
+          id: null,
+        },
+        newValues: {}
+      }),
     }
   },
   computed: {
     errorMessage() {
-      return this.$page.props.hasOwnProperty('flash') ? this.$page.props.flash.errorMessage : ''
+      return 'flash' in this.$page.props ? this.$page.props.flash.errorMessage : ''
     },
     selectWord() {
       return this.selectedAll ? 'Unselect' : 'Select'
@@ -73,22 +90,11 @@ export default {
       for (let param in newValues) {
         newForm.newValues[param] = newValues[param]
       }
-
       newForm.filter.id = this.getSelectedIds()
-
-      newForm.put(this.baseApiUrl)
-    },
-    setNewSize() {
-      this.massUpdateValue('size');
-      // this.updateSelected({size: this.newSize})
-    },
-    setNewWeight() {
-      this.massUpdateValue('weight');
-
-      // this.updateSelected({weight: this.newWeight})
+      newForm.patch(this.baseApiUrl)
     },
     massUpdateValue(param) {
-      this.updateSelected({[param]: this.massUpdateValues[param]});
+      this.updateSelected({[param]: this.massUpdateValues[param]})
     },
     deleteSelected() {
       this.massActionsForm.filter.id = this.getSelectedIds()

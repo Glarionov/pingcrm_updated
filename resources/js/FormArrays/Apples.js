@@ -63,11 +63,11 @@ let validationRules =
             },
             {
                 "text": "No",
-                "value": 1
+                "value": 0
             },
             {
                 "text": "Yes",
-                "value": 2
+                "value": 1
             }
         ],
         "type": "text",
@@ -87,7 +87,7 @@ let validationRules =
         "attributes": {
             "id": "image"
         },
-        "element": "Input",
+        "element": "InputFile",
         "label": "image",
         "name": "image",
         "value": ""

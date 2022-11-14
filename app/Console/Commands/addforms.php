@@ -60,12 +60,6 @@ class addforms extends Command
 //            $fileContent = "let requiredFields = [\n";
             $fileContent = '';
             if ($mainClass instanceof AbstractUpdateOrCreateRequest) {
-//                $requiredFields = [];
-//
-//                foreach ($mainClass::$requiredToCreateFields as $requiredToCreateField) {
-//                    $requiredFields[] = "'$requiredToCreateField'";
-//                }
-//                $fileContent .= implode(",\n", $requiredFields) . "\n];\n";
 
                 $fileContent .= "let validationRules = \n";
 
@@ -119,6 +113,7 @@ class addforms extends Command
                         switch ($validationRule) {
                             case 'file': case 'image':
                                 $type = 'file';
+                                $element = 'InputFile';
                                 break;
 
                             case 'required':
@@ -138,17 +133,15 @@ class addforms extends Command
                             $element = 'select';
                             $paramContent['options'] = [
                                 ['text' => 'Not matter', 'value' => ''],
-                                ['text' => 'No', 'value' => 1],
-                                ['text' => 'Yes', 'value' => 2],
+                                ['text' => 'No', 'value' => 0],
+                                ['text' => 'Yes', 'value' => 1],
                             ];
                         }
                     }
 
                     if ($type) {
-//                        $fileContent .= "type: $type,\n";
                         $paramContent['type']  = $type;
                     }
-//                    $fileContent .= "},\n";
 
                     $attributes['id'] = $param;
                     $paramContent['id'] = $param;
@@ -164,32 +157,11 @@ class addforms extends Command
 
                 $fileContent.= "\nexport default validationRules";
 
-//                /*s*/echo '$fileContent= <pre>' . print_r($fileContent, true). '</pre>'; //todo r
-
                 $class = get_class($mainClass);
                 $resultFileName = preg_replace('#App\\\Http\\\Requests\\\ConcreteRequests\\\(.*)Request#', '$1', $class);
 
                 file_put_contents("resources/js/FormArrays/$resultFileName.js", $fileContent);
             }
-
-
-
-
-//            $class = str_replace(['app/', '/', '.php'], ['\\App\\', '\\', ''], $file);
-//            $resource = new $class([]);
-
-//            // get the file name of the current file without the extension
-//            // which is essentially the class name
-//            $class = basename($file, '.php');
-//
-//            if (class_exists($class))
-//            {
-//                $obj = new $class;
-//                foreach(get_class_methods($obj) as $method)
-//                {
-//                    echo $method . '\n';
-//                }
-//            }
         }
 
         return 0;

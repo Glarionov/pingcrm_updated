@@ -21,7 +21,7 @@ class RouteConstructor
         foreach (static::$inertiaRoutes as $route => $controller) {
 //            Route::apiResource($route, $controller);
             Route::delete("/$route", [$controller, 'destroyByFilter']);
-            Route::put("/$route", [$controller, 'updateByFilter']);
+            Route::patch("/$route", [$controller, 'updateByFilter']);
 //            Route::put("/$route-list", [OrganizationsController::class, 'update']);//todo r
         }
     }
@@ -40,7 +40,7 @@ class RouteConstructor
 
             Route::apiResource( "/api/" . $route, $controller);
             Route::delete("/api/$route", [$controller, 'destroyByFilter']);
-            Route::put("/api/$route", [$controller, 'updateByFilter']);
+            Route::patch("/api/$route", [$controller, 'updateByFilter']);
             Route::resource($route, $controller, ['as' => 'web_' . $route]);
 
 ////            Route::put("/$route-list", [OrganizationsController::class, 'update']);//todo r

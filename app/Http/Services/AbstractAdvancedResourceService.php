@@ -24,6 +24,13 @@ class AbstractAdvancedResourceService extends AbstractResourceService
 
     protected static bool $needSpecifyAll = true;
 
+    protected static array $filesToSave = [
+        'image' => [
+            'path_id' => 1,
+            'path' => 'public/apples/'
+        ]
+    ];
+
     /**
      *
      *
@@ -187,6 +194,13 @@ class AbstractAdvancedResourceService extends AbstractResourceService
             return $objectData;
         }
         $object = $objectData['mainObject'];
+
+        foreach (static::$filesToSave as $fileKey => $fileSaveData) {
+            if (!empty($requestData[$fileKey])) {
+                $path = $requestData[$fileKey]->store($fileSaveData['path']);
+                $requestData[$fileKey] = str_replace('public/', '/storage/', $path);
+            }
+        }
 
         $object->fill($requestData);
         $object->save();

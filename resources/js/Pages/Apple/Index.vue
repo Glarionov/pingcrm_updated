@@ -12,13 +12,13 @@
     </SearchFormsWrapper>
 
     <div class="justify-content-around d-flex flex-column mb-6 mt-2">
-      <div class="btn btn-success">
+
         <Link href="/apples/create">
+          <div class="btn btn-success">
           <span>Create</span>
           <span class="hidden md:inline">&nbsp;Apple</span>
+          </div>
         </Link>
-      </div>
-
     </div>
     <div class="bg-white rounded-md shadow overflow-x-auto">
       <BaseTableWrapper
@@ -29,6 +29,7 @@
         :select-word="selectWord"
       >
         <template #default="{mainObject}">
+          <TableCellImage :src="mainObject.image"/>
           <TableCellsByObject :keys="['color', 'size', 'weight', 'quality']" :main-object="mainObject" />
         </template>
 
@@ -48,8 +49,13 @@
     </div>
 
     <MassActionsWrapper>
-      <MassActionElement v-model="massUpdateValues.size" label="Set size:" :main-action="setNewSize" />
-      <MassActionElement v-model="massUpdateValues.weight" label="Set weight:" :main-action="setNewWeight" />
+      <MassActionElement
+        v-model="massUpdateValues.size" label="Set size:"
+        :main-action="() => massUpdateValue('size')" />
+      <MassActionElement
+        v-model="massUpdateValues.weight" label="Set weight:"
+        :main-action="() => massUpdateValue('weight')" />
+
       <form @submit.prevent="deleteSelected">
         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
       </form>
@@ -59,48 +65,30 @@
 
 <script>
 
-import Layout from '@/Shared/Layout'
-import validationRules from "@/FormArrays/Apples";
-import IndexMixin from "@/Mixins/ResourceMixins/IndexMixin";
+import validationRules from '@/FormArrays/Apples'
+import IndexMixin from '@/Mixins/ResourceMixins/IndexMixin'
+import AppleMixin from '@/Pages/Apple/AppleMixin'
+import { useForm } from '@inertiajs/inertia-vue3'
+import DefaultLayout from "@/Shared/DefaultLayout";
 
 export default {
-
-  layout: Layout,
-  props: {
-    filters: Object,
-    mainObjects: Object,
-    success: Boolean,
-    error: String,
-  },
   data() {
     return {
-      baseApiUrl: '/api/apples',
-      baseUrl: '/apples',
       massUpdateValues: {
         size: null,
         weight: null,
       },
-      defaultColNames: ['Color', 'Size', 'Weight', 'Quality'],
+      defaultColNames: ['Image', 'Color', 'Size', 'Weight', 'Quality'],
       validationRules,
-      filter: this.$inertia.form({
+      filter: useForm({
         color: null,
         size: [null, null],
         weight: null,
         quality_id: null,
       }),
-      massActionsForm: this.$inertia.form({
-        filter: {
-          id: null,
-        },
-      }),
-      form: {
-        search: this.filters? this.filters.search: null,
-        trashed: this.filters? this.filters.trashed: null,
-      },
     }
   },
-  mixins: [IndexMixin],
-  methods: {
-  },
+  layout: DefaultLayout,
+  mixins: [IndexMixin, AppleMixin],
 }
 </script>

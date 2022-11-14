@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="not-found" v-if="!success && error_type === 'not_found'">
+    <div class="not-found" v-if="!success && errorType === 'not_found'">
       Not found
     </div>
     <div class="found" v-else>
@@ -52,7 +52,7 @@ export default {
     LoadingButton
   },
   // eslint-disable-next-line vue/require-prop-types,vue/prop-name-casing
-  props: ['success', 'error_type', 'mainObject'],
+  props: ['success', 'errorType', 'mainObject'],
   data() {
     return {
       inputs: FormHelper.setNewLabels(validationRules, labels),

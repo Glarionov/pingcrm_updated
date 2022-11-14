@@ -11,7 +11,7 @@ class AppleResource extends AbstractResource
     /** @var Apple */
     public $resource;
 
-    const SIMPLE_FIELDS = ['color', 'size', 'weight', 'quality_id'];
+    const SIMPLE_FIELDS = ['color', 'size', 'weight', 'quality_id', 'image'];
 
     const PRETTY_DATE_FIELDS = ['created_at'];
 

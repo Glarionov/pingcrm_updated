@@ -8,6 +8,7 @@ use App\Http\Services\AbstractResourceService;
 use App\Http\Services\AppointmentService;
 use App\Models\Appointment;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request as RequestFacade;
 use Inertia\Inertia;
+use Inertia\Response;
+
 abstract class AbstractResourceController extends Controller
 {
     const RENDER_METHOD_INERTIA = 'inertia';
@@ -34,10 +37,15 @@ abstract class AbstractResourceController extends Controller
 //        $this->accept = $request->header('Accept', null);
     }
 
+    /**
+     * @param $data
+     * @param $template
+     * @param Request|null $request
+     * @return RedirectResponse|Response
+     */
     protected static function returnResult($data, $template = null, Request $request = null)
     {
 
-//        todo r
         if (static::$renderMethod === static::RENDER_METHOD_INERTIA) {
 
             if ($request->header('Accept', null) === 'application/json') {
@@ -72,31 +80,18 @@ abstract class AbstractResourceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(Request $request)
     {
-//        return Inertia::render('Organizations/Index', [
-//            'filters' => \Illuminate\Support\Facades\Request::all('search', 'trashed'),
-//            'organizations' => Auth::user()->account->organizations()
-//                ->orderBy('name')
-//                ->filter(RequestFacade::only('search', 'trashed'))
-//                ->paginate(10)
-//                ->withQueryString()
-//                ->through(fn ($organization) => [
-//                    'id' => $organization->id,
-//                    'name' => $organization->name,
-//                    'phone' => $organization->phone,
-//                    'city' => $organization->city,
-//                    'deleted_at' => $organization->deleted_at,
-//                ]),
-//        ]);
-
         $data = static::$mainService::list($request->all());
-
         return static::returnResult($data, 'Index', $request);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     */
     public function create(Request $request)
     {
         return static::returnResult([], 'Create', $request);
@@ -105,8 +100,8 @@ abstract class AbstractResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\AppointmentsRequest  $request
-     * @return Model
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function store(Request $request)
     {
@@ -121,8 +116,9 @@ abstract class AbstractResourceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return Model
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse|Response
      */
     public function show(Request $request, int $id)
     {
@@ -130,6 +126,11 @@ abstract class AbstractResourceController extends Controller
         return static::returnResult($data,  'Show', $request);
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
     public function edit(Request $request, int $id)
     {
         $data = static::$mainService::show($id);
@@ -139,17 +140,20 @@ abstract class AbstractResourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\AppointmentsRequest  $request
-     * @param  \App\Models\Appointment  $appointments
-     * @return Model
+     * @param  Request  $request
+     * @param  int $id
+     * @return RedirectResponse|Response
      */
     public function update(Request $request, int $id)
     {
         if (static::$requestType) {
-            $request->validate(static::$requestType::$updateRequestRules);
+            $requestData = $request->validate(static::$requestType::$updateRequestRules);
+        } else {
+            $requestData = $request->all();
         }
 
-        return static::$mainService::update($request->all(), $id);
+        $data = static::$mainService::update($requestData, $id);
+        return static::returnResult($data,  null, $request);
     }
 
     /**
@@ -158,8 +162,9 @@ abstract class AbstractResourceController extends Controller
      * @param  \App\Models\Appointment  $appointments
      * @return Model
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, int $id)
     {
-        return static::$mainService::update($id);
+        $data = static::$mainService::destroy($id);
+        return static::returnResult($data,  null, $request);
     }
 }

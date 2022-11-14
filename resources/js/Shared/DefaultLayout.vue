@@ -1,6 +1,9 @@
 <template>
-  Default layout
-  <slot />
+  <div class="p-2">
+    Apple factory
+    <slot />
+  </div>
+
 </template>
 
 <script>

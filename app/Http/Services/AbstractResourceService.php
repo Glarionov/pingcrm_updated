@@ -64,8 +64,7 @@ class AbstractResourceService
         $object = new static::$mainModel();
         $object->fill($requestData);
         $object->save();
-        /*s*/echo '$object->toArray()= <pre>' . print_r($object->toArray(), true). '</pre>'; //todo r
-exit;//todo r
+
         return ['success' => true, 'data' => $object];
     }
 
@@ -81,7 +80,7 @@ exit;//todo r
 
         if (!$object) {
             $message = "Can't find " . static::getSingularModelName() . " by ID $id";
-            return ['success' => false, 'message' => $message, 'error_type' => static::NOT_FOUND_ERROR];
+            return ['success' => false, 'message' => $message, 'errorType' => static::NOT_FOUND_ERROR];
         }
         return ['success' => true, 'data' => $object];
     }

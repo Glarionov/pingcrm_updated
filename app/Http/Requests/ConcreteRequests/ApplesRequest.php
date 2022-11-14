@@ -12,11 +12,11 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
      * @var array
      */
     public static array $updateRequestRules = [
-        'size' => ['integer', 'max:10', 'min:2'],
-        'weight' => ['integer', 'max:101', 'min:1'],
-        'quality_id' => ['integer', 'exists:apple_qualities,id'],
-        'is_eaten' => ['boolean'],
-        'image' => ['image']
+        'size' => ['integer', 'max:10', 'min:2', 'nullable'],
+        'weight' => ['integer', 'max:101', 'min:1', 'nullable'],
+        'quality_id' => ['integer', 'exists:apple_qualities,id', 'nullable'],
+        'is_eaten' => ['boolean', 'nullable'],
+        'image' => ['image', 'nullable']
 //        'type_id' => ['integer', 'exists:appointments_types,id'],
 //        'first_name' => ['string'],
 //        'last_name' => ['string'],

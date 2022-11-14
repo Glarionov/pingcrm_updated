@@ -7,6 +7,7 @@
 <script>
 
 import Input from "@/Shared/Forms/Input";
+import InputFile from "@/Shared/Forms/InputFile";
 import Textarea from "@/Shared/Forms/Textarea";
 import FormElementDefaultWrapper from "@/Shared/Forms/FormElementDefaultWrapper";
 import PassModelTest from "@/Test/PassModelTest";
@@ -16,6 +17,7 @@ export default {
   name: "FormElementDefaultTemplate",
   components: {
     Input,
+    InputFile,
     Select,
     Textarea,
     FormElementDefaultWrapper,

@@ -16,6 +16,10 @@
     @inertiaHead
 </head>
 <body class="font-sans leading-none text-gray-700 antialiased">
+{{--<img src="/storage/yLDdHEtO763wY12Fq2rSU7mSdEdNfUCI0yI93aYC.jpg">--}}
+{{--<img src="{{ url('storage/apples/'. 'yLDdHEtO763wY12Fq2rSU7mSdEdNfUCI0yI93aYC.jpg') }}" alt="" title="" />--}}
+
+
     @inertia
 </body>
 </html>
