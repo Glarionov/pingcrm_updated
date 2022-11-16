@@ -41,11 +41,7 @@ class addforms extends Command
     public function handle()
     {
 
-//        $directory = '/app/Http/Resources/ConcreteResources';
         $directory = '/';
-        $directories = Storage::directories($directory);
-
-//        /*s*/echo '$directories= <pre>' . print_r($directories, true). '</pre>'; //todo r
 
         $basePath = 'app/Http/Requests/ConcreteRequests/';
 
@@ -54,10 +50,7 @@ class addforms extends Command
         foreach (glob("$basePath*") as $file)
         {
             $class = str_replace(['app/', '/', '.php'], ['\\App\\', '\\', ''], $file);
-//            require_once $file;
             $mainClass = new $class([]);
-
-//            $fileContent = "let requiredFields = [\n";
             $fileContent = '';
             if ($mainClass instanceof AbstractUpdateOrCreateRequest) {
 
@@ -66,7 +59,6 @@ class addforms extends Command
                 $fileArray = [];
                 foreach ($mainClass::generateInputRequestArray() as $param => $validationRules) {
 
-//                    $fileContent .= "$param:{\n";
                     $element = 'Input';
                     $paramContent = ['required' => false];
                     $attributes = [];

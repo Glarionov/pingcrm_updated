@@ -8,7 +8,6 @@ createInertiaApp({
   resolve: name => {
       const page = require(`./Pages/${name}`);
       page.layout = page.layout || DefaultLayout;
-      /*s*/console.log('page.layout=', page.layout); //todo r
       return page
   },
   title: title => title ? `${title} - Ping CRM` : 'Ping CRM',
