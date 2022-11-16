@@ -1,5 +1,5 @@
 <template>
-  <select class="form-input border" v-bind="{ ...inputData.attributes ?? {}}" :name="inputData.name ?? null" :id="inputData.id ?? null"
+  <select class="form-control" v-bind="{ ...inputData.attributes ?? {}}" :name="inputData.name ?? null" :id="inputData.id ?? null"
          :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
   >
     <option disabled selected>

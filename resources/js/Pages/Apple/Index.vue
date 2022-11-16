@@ -60,6 +60,7 @@
         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
       </form>
     </MassActionsWrapper>
+    <pagination class="mt-6" :links="mainObjects.meta.links" />
   </div>
 </template>
 

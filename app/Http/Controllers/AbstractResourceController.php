@@ -32,11 +32,6 @@ abstract class AbstractResourceController extends Controller
 
     protected string $accept;
 
-    public function __construct(Request $request)
-    {
-//        $this->accept = $request->header('Accept', null);
-    }
-
     /**
      * @param $data
      * @param $template
@@ -45,7 +40,6 @@ abstract class AbstractResourceController extends Controller
      */
     protected static function returnResult($data, $template = null, Request $request = null)
     {
-
         if (static::$renderMethod === static::RENDER_METHOD_INERTIA) {
 
             if ($request->header('Accept', null) === 'application/json') {
@@ -53,25 +47,13 @@ abstract class AbstractResourceController extends Controller
             }
 
             if (!$template) {
-
-//                return Redirect::route('apples.index');
                 if (isset($data['success']) && $data['success'] === false) {
                     return redirect()->back()->with([
                         'errorMessage' => $data['message'] ?? '',
                     ]);
-                    return Redirect::back()->withErrors(['error' => 'error1']);
-//                    return Redirect::back()->withErrors(['error' => $data['message'] ?? '']);
-
-
-                    return Redirect::back()->with('error', 'error');
-                    return Redirect::back()->with('success', false)->with('message', $data['message'] ?? '');
                 }
                 return Redirect::back()->with(['success' => true, 'errorMessage' => '']);
-                return redirect(route('apples.index'));
-//                return Redirect::back()->with('success', 'Organization updated.');
-//                return $data;
             }
-
             return Inertia::render(static::$templatePrefix . $template, $data);
         }
         return $data;
@@ -159,8 +141,9 @@ abstract class AbstractResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Appointment  $appointments
-     * @return Model
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse|Response
      */
     public function destroy(Request $request, int $id)
     {

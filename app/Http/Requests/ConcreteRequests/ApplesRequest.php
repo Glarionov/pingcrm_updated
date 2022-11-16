@@ -17,11 +17,6 @@ class ApplesRequest extends AbstractUpdateOrCreateRequest
         'quality_id' => ['integer', 'exists:apple_qualities,id', 'nullable'],
         'is_eaten' => ['boolean', 'nullable'],
         'image' => ['image', 'nullable']
-//        'type_id' => ['integer', 'exists:appointments_types,id'],
-//        'first_name' => ['string'],
-//        'last_name' => ['string'],
-//        'email' => ['email'],
-//        'visit_date' => ['date', 'after:2000-01-01'],
     ];
 
     /**

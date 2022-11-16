@@ -1,13 +1,9 @@
 <template>
-  <div class="col-2 mr-2">
+  <div class="col-2 col-lg-1 mr-3">
     <div class="mb-2">
-      {{label}}
+      {{ label }}
     </div>
-<!--    <input type="text"-->
-<!--           class="form-control form-control-sm w-50"-->
-<!--           v-model="inputVal">-->
-
-    <component :is="inputElement" :inputData="inputData" v-model="inputVal"/>
+    <component :is="inputElement" v-model="inputVal" :input-data="inputData" />
   </div>
 </template>
 
@@ -17,7 +13,7 @@ import Input from "@/Shared/Forms/Input";
 import Select from "@/Shared/Forms/Select";
 
 export default {
-  name: "SmallSearchElement",
+  name: 'SmallSearchElement',
   components: {
     Input,
     Select,

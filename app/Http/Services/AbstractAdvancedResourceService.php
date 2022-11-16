@@ -32,13 +32,14 @@ class AbstractAdvancedResourceService extends AbstractResourceService
     ];
 
     /**
-     *
+     * Applies filters from $requestData
      *
      * @param $baseQuery
      * @param $requestData
+     * @param bool $isStringData
      * @return bool[]
      */
-    protected static function applyDefaultFilters(&$baseQuery, $requestData, $isStringData = true): array
+    protected static function applyDefaultFilters(&$baseQuery, $requestData, bool $isStringData = true): array
     {
         $appliedFilters = false;
 
@@ -103,6 +104,20 @@ class AbstractAdvancedResourceService extends AbstractResourceService
     }
 
     /**
+     * @param $requestData
+     * @return void
+     */
+    protected static function saveFiles(&$requestData)
+    {
+        foreach (static::$filesToSave as $fileKey => $fileSaveData) {
+            if (!empty($requestData[$fileKey])) {
+                $path = $requestData[$fileKey]->store($fileSaveData['path']);
+                $requestData[$fileKey] = str_replace('public/', '/storage/', $path);
+            }
+        }
+    }
+
+    /**
      * @param array|null $requestData
      * @param array $filter
      * @param array $withs
@@ -157,6 +172,7 @@ class AbstractAdvancedResourceService extends AbstractResourceService
     public static function store(array $requestData): array
     {
         $object = new static::$mainModel();
+        static::saveFiles($requestData);
         $object->fill($requestData);
         $object->save();
 
@@ -194,13 +210,7 @@ class AbstractAdvancedResourceService extends AbstractResourceService
             return $objectData;
         }
         $object = $objectData['mainObject'];
-
-        foreach (static::$filesToSave as $fileKey => $fileSaveData) {
-            if (!empty($requestData[$fileKey])) {
-                $path = $requestData[$fileKey]->store($fileSaveData['path']);
-                $requestData[$fileKey] = str_replace('public/', '/storage/', $path);
-            }
-        }
+        static::saveFiles($requestData);
 
         $object->fill($requestData);
         $object->save();

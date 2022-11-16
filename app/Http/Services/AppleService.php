@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class AppleService extends AbstractAdvancedResourceService
 {
-    public static int $itemsPerPage = 1000;
+    public static int $itemsPerPage = 2;
 
     public static string $mainModel = Apple::class;
 
